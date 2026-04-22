@@ -37,5 +37,24 @@ def measure_average_mac_time(pattern: list[list[float]], filter_matrix: list[lis
         elapsed_ms = (end_time - start_time) * 1000
         total_elapsed_ms += elapsed_ms
 
-    average_elapsed_ms = total_elapsed_ms / repeat
-    return average_elapsed_ms
+    return total_elapsed_ms / repeat
+
+# 하나의 패턴에 대해 여러 필터와의 MAC 연산 전체 시간을 측정하는 함수.
+def measure_average_multi_mac_time(
+    pattern: list[list[float]],
+    filters: list[list[list[float]]],
+    repeat: int = 10
+) -> float:
+    total_elapsed_ms = 0.0
+
+    for _ in range(repeat):
+        start_time = time.perf_counter()
+
+        for filter_matrix in filters:
+            calculate_mac(pattern, filter_matrix)
+
+        end_time = time.perf_counter()
+        elapsed_ms = (end_time - start_time) * 1000
+        total_elapsed_ms += elapsed_ms
+
+    return total_elapsed_ms / repeat
